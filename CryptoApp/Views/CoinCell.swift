@@ -36,6 +36,12 @@ final class CoinCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.coinLogo.image = nil
+        self.coinName.text = nil
+    }
+    
     func configure(with coin: Coin) {
         self.coin = coin
         coinName.text = coin.name

@@ -8,8 +8,8 @@
 struct Constants {
     
     //MARK: - API
-    static let schema = "https"
-    static let baseURL = "pro-api.coinmarketcap.com"
+    static let scheme = "https"
+    static let host = "pro-api.coinmarketcap.com"
     static let port: Int? = nil
     static let fullURL = "https://pro-api.coinmarketcap.com/"
     

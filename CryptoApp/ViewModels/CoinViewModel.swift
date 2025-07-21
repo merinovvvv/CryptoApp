@@ -38,19 +38,19 @@ final class CoinViewModel {
     
     //MARK: - Computed Properties
     var rankLabelText: String {
-        return "Rank: \(coin.cmc_rank)"
+        return "Rank: \(coin.rank)"
     }
     
     var priceLabelText: String {
-        return "Price: $\(coin.quote.USD.price) USD"
+        return "Price: $\(coin.pricingData.USD.price) USD"
     }
     
     var marketCapLabelText: String {
-        return "Market Cap: $\(coin.quote.USD.market_cap) USD"
+        return "Market Cap: $\(coin.pricingData.USD.marketCap) USD"
     }
     
     var maxSupplyLabelText: String {
-        if let maxSupply = coin.max_supply {
+        if let maxSupply = coin.maxSupply {
             return "Max Supply: \(maxSupply)"
         } else {
             return "scroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\nscroll test\n"
