@@ -31,7 +31,7 @@ final class CoinService {
                 } catch {
                     completion(.failure(.unknown()))
                 }
-                
+                return
             }
             
             if let data = data {
@@ -41,7 +41,6 @@ final class CoinService {
                 } catch {
                     completion(.failure(.decodingError(error.localizedDescription)))
                 }
-                
             } else {
                 completion(.failure(.unknown()))
             }

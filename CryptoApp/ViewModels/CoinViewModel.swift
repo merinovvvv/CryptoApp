@@ -38,7 +38,8 @@ final class CoinViewModel {
     
     //MARK: - Computed Properties
     var rankLabelText: String {
-        return "Rank: \(coin.rank)"
+        guard let rank = coin.rank else { return "" }
+        return "Rank: \(rank)"
     }
     
     var priceLabelText: String {

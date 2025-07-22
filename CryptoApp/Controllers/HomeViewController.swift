@@ -19,6 +19,7 @@ final class HomeViewController: UIViewController {
     
     //MARK: - UI Components
     private let tableView: UITableView = UITableView()
+    private let searchController = UISearchController()
     
     //MARK: - LifeCycle
     
@@ -36,7 +37,19 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .systemBackground
         navigationItem.title = "CryptoApp"
         setupUI()
+        setupSearchController()
         setupClosures()
+    }
+    
+    private func setupSearchController() {
+        self.searchController.searchResultsUpdater = self
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.searchBar.placeholder = "Search Cryptos"
+        
+        self.navigationItem.searchController = self.searchController
+        self.definesPresentationContext = false
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     private func setupClosures() {
@@ -70,6 +83,16 @@ final class HomeViewController: UIViewController {
     }
 }
 
+//MARK: - SearchController
+extension HomeViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        self.viewModel.setInSearchMode(isSearchControllerActive: searchController.isActive, searchBarText: searchController.searchBar.text)
+        self.viewModel.updateSearchController(searchBarText: searchController.searchBar.text)
+    }
+    
+    
+}
+
 //MARK: - Setup UI
 private extension HomeViewController {
     func setupUI() {
@@ -98,8 +121,6 @@ private extension HomeViewController {
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
-    //MARK: - Selectors
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource

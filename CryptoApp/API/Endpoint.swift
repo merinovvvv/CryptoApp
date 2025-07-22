@@ -39,19 +39,19 @@ enum Endpoint {
     private var httpMethod: String {
         switch self {
         case .fetchCoins:
-            HTTP.Method.get.rawValue
+            return HTTP.Method.get.rawValue
         }
     }
     
     private var httpBody: Data? {
-        switch self { case .fetchCoins: nil }
+        switch self { case .fetchCoins: return nil }
     }
     
     private var queryItems: [URLQueryItem] {
         switch self {
         case .fetchCoins:
             return [
-                URLQueryItem(name: "limit", value: "150"),
+                URLQueryItem(name: "limit", value: "5"),
                 URLQueryItem(name: "sort", value: "market_cap"),
                 URLQueryItem(name: "convert", value: "USD"),
                 URLQueryItem(name: "aux", value: "cmc_rank,max_supply,circulating_supply,total_supply")

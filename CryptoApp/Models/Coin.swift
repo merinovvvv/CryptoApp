@@ -17,7 +17,7 @@ struct Coin: Decodable {
     let id: Int
     let name: String
     let maxSupply: Int?
-    let rank: Int
+    let rank: Int?
     let pricingData: PricingData
     
     var logoURL: URL? {
