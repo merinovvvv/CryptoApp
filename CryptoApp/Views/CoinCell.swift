@@ -11,7 +11,7 @@ final class CoinCell: UITableViewCell {
     
     //MARK: - Variables
     static let identifier: String = "CoinCell"
-    private(set) var coin: Coin?
+    private var viewModel: CoinCellViewModel?
     
     //MARK: - Constants
     private enum Constants {
@@ -40,12 +40,21 @@ final class CoinCell: UITableViewCell {
         super.prepareForReuse()
         self.coinLogo.image = nil
         self.coinName.text = nil
+        viewModel?.onImageLoaded = nil
+        viewModel = nil
     }
     
     func configure(with coin: Coin) {
-        self.coin = coin
-        coinName.text = coin.name
-        loadImage()
+        viewModel = CoinCellViewModel(coin: coin)
+        coinName.text = viewModel?.coinName
+        
+        viewModel?.onImageLoaded = { [weak self] image in
+            DispatchQueue.main.async {
+                self?.coinLogo.image = image
+            }
+        }
+        
+        viewModel?.loadImage()
     }
 }
 
@@ -81,20 +90,8 @@ private extension CoinCell {
         coinName.font = .systemFont(ofSize: Constants.coinNameSize, weight: .semibold)
         coinName.textColor = .label
         coinName.textAlignment = .left
-    }
-    
-    func loadImage() {
         
-        guard let url = coin?.logoURL else {
-            coinLogo.image = UIImage(systemName: "questionmark")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data else { return }
-            DispatchQueue.main.async {
-                self?.coinLogo.image = UIImage(data: data)
-            }
-        }.resume()
+        coinLogo.contentMode = .scaleAspectFit
+        coinLogo.clipsToBounds = true
     }
 }

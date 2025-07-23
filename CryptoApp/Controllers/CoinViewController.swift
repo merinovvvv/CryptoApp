@@ -57,6 +57,8 @@ private extension CoinViewController {
         setupViewHierarchy()
         setupConstraints()
         configureViews()
+        
+        viewModel.loadImage()
     }
     
     func setupViewHierarchy() {

@@ -23,7 +23,7 @@ final class CacheManager {
     }
     
     func setImage(_ image: UIImage, forKey key: String) {
-        let cost = image.pngData()?.count ?? 0
+        let cost = Int(image.size.width * image.size.height * image.scale * 4)
         cache.setObject(image, forKey: key as NSString, cost: cost)
     }
 }

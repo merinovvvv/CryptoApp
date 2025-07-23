@@ -18,7 +18,6 @@ final class CoinViewModel {
     //MARK: - Initializer
     init(coin: Coin) {
         self.coin = coin
-        loadImage()
     }
     
     //MARK: - Methods
@@ -28,10 +27,26 @@ final class CoinViewModel {
             return
         }
         
+        let cacheKey = url.absoluteString as NSString
+        if let cachedImage = CacheManager.shared.image(for: cacheKey as String) {
+            onImageLoaded?(cachedImage)
+            return
+        }
+        
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data else { return }
+            guard let strongSelf = self,
+                  let data = data,
+                  let image = UIImage(data: data) else {
+                DispatchQueue.main.async {
+                    self?.onImageLoaded?(UIImage(systemName: "questionmark"))
+                }
+                return
+            }
+            
+            CacheManager.shared.setImage(image, forKey: cacheKey as String)
+            
             DispatchQueue.main.async {
-                self?.onImageLoaded?(UIImage(data: data))
+                strongSelf.onImageLoaded?(image)
             }
         }.resume()
     }
