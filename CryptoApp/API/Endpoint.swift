@@ -51,7 +51,7 @@ enum Endpoint {
         switch self {
         case .fetchCoins:
             return [
-                URLQueryItem(name: "limit", value: "40"),
+                URLQueryItem(name: "limit", value: "10"),
                 URLQueryItem(name: "sort", value: "market_cap"),
                 URLQueryItem(name: "convert", value: "USD"),
                 URLQueryItem(name: "aux", value: "cmc_rank,max_supply,circulating_supply,total_supply")

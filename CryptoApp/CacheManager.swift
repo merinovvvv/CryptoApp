@@ -26,4 +26,29 @@ final class CacheManager {
         let cost = Int(image.size.width * image.size.height * image.scale * 4)
         cache.setObject(image, forKey: key as NSString, cost: cost)
     }
+    
+    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+        if let cachedImage = image(for: urlString) {
+            print("cache")
+            completion(cachedImage)
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        session.dataTask(with: url) { [weak self] data, response, error in
+            guard let data = data,
+                  error == nil,
+                  let image = UIImage(data: data) else {
+                completion(nil)
+                return
+            }
+            
+            self?.setImage(image, forKey: urlString)
+            completion(image)
+        }.resume()
+    }
 }

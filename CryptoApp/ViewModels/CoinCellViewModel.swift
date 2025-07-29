@@ -25,28 +25,9 @@ final class CoinCellViewModel {
             return
         }
         
-        let cacheKey = url.absoluteString
-        if let cachedImage = CacheManager.shared.image(for: cacheKey) {
-            onImageLoaded?(cachedImage)
-            return
+        CacheManager.shared.loadImage(from: url.absoluteString) { [weak self] logo in
+            self?.onImageLoaded?(logo)
         }
-        
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let strongSelf = self,
-                  let data = data,
-                  let image = UIImage(data: data) else {
-                DispatchQueue.main.async {
-                    self?.onImageLoaded?(UIImage(systemName: "questionmark"))
-                }
-                return
-            }
-            
-            CacheManager.shared.setImage(image, forKey: cacheKey)
-            
-            DispatchQueue.main.async {
-                strongSelf.onImageLoaded?(image)
-            }
-        }.resume()
     }
     
     //MARK: - Computed Properties
