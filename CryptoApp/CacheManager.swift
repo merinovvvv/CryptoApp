@@ -29,7 +29,6 @@ final class CacheManager {
     
     func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
         if let cachedImage = image(for: urlString) {
-            print("cache")
             completion(cachedImage)
             return
         }

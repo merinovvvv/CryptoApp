@@ -25,7 +25,13 @@ final class CoinCellViewModel {
             return
         }
         
-        CacheManager.shared.loadImage(from: url.absoluteString) { [weak self] logo in
+        let urlString = url.absoluteString
+        
+        if CacheManager.shared.image(for: urlString) != nil {
+            return
+        }
+        
+        CacheManager.shared.loadImage(from: urlString) { [weak self] logo in
             self?.onImageLoaded?(logo)
         }
     }

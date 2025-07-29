@@ -12,6 +12,7 @@ final class CoinCell: UITableViewCell {
     //MARK: - Variables
     static let identifier: String = "CoinCell"
     private var viewModel: CoinCellViewModel?
+    private var currentCoinId: Int?
     
     //MARK: - Constants
     private enum Constants {
@@ -38,18 +39,32 @@ final class CoinCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.coinLogo.image = nil
+        //self.coinLogo.image = nil
+        
         self.coinName.text = nil
         viewModel?.onImageLoaded = nil
         viewModel = nil
+        currentCoinId = nil
     }
     
     func configure(with coin: Coin) {
+        
+        if currentCoinId == coin.id {
+            return
+        }
+        
+        currentCoinId = coin.id
         viewModel = CoinCellViewModel(coin: coin)
         coinName.text = viewModel?.coinName
         
+        if let imageURL = coin.logoURL?.absoluteString,
+           let cachedImage = CacheManager.shared.image(for: imageURL) {
+            coinLogo.image = cachedImage
+        }
+        
         viewModel?.onImageLoaded = { [weak self] image in
             DispatchQueue.main.async {
+                guard self?.currentCoinId == coin.id else { return }
                 self?.coinLogo.image = image
             }
         }
@@ -93,5 +108,6 @@ private extension CoinCell {
         
         coinLogo.contentMode = .scaleAspectFit
         coinLogo.clipsToBounds = true
+        coinLogo.image = UIImage(systemName: "questionmark.circle")
     }
 }
